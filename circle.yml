@@ -1,0 +1,10 @@
+machine:
+  xcode:
+    version: "7.0"
+    XCODE_SCHEME: Parking
+    XCODE_WORKSPACE: Parking.xcworkspace
+
+dependencies:
+  override:
+    - pod install:
+        timeout: 300
