@@ -24,8 +24,8 @@ xcuserdata
 *.xcscmblueprint
 
 ## Obj-C/Swift specific
-*.hmap
-*.ipa
+.hmap
+.ipa
 
 # CocoaPods
 #
@@ -34,6 +34,7 @@ xcuserdata
 # http://guides.cocoapods.org/using/using-cocoapods.html#should-i-ignore-the-pods-directory-in-source-control
 #
 Pods/
+Podfile.lock
 
 # Carthage
 #
@@ -42,4 +43,5 @@ Pods/
 
 Carthage/Build
 
+# Facebook Infer analyzer output
 infer-out
