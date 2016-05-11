@@ -12,7 +12,7 @@ extension String {
     func subString(startIndex: Int, length: Int) -> String {
         let start = self.startIndex.advancedBy(startIndex)
         let end = self.startIndex.advancedBy(startIndex + length)
-        return self.substringWithRange(Range<String.Index>(start: start, end: end))
+        return self.substringWithRange(Range<String.Index>(start ..< end))
     }
 }
 

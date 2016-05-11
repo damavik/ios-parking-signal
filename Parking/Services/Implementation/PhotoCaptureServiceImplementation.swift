@@ -94,7 +94,10 @@ class PhotoCaptureServiceImplementation : NSObject, PhotoCaptureService {
                     let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
                     let image = UIImage(data: imageData)
                     
-                    UIImageWriteToSavedPhotosAlbum(image!, self, "image:didFinishSavingWithError:contextInfo:", nil)
+                    UIImageWriteToSavedPhotosAlbum(image!,
+                                                   self,
+                                                   #selector(PhotoCaptureServiceImplementation.image(_:didFinishSavingWithError:contextInfo:)),
+                                                   nil)
                 } else {
                     Log("Failed to capture photo with error '%@'", error)
                     self.captureCallback!(error)
