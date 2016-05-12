@@ -1,18 +1,28 @@
 branches:
- only:
+  only:
   - master
 git:
   depth: 5
 language: objective-c
-os: osx
 osx_image: xcode7.3
 before_install:
-  - rvm install 2.2.5
-  - xctool --version
-  #- brew update
-  #- brew outdated xctool || brew upgrade xctool
-  - pod install
+- rvm install 2.2.5
+- pod install
 cache:
-  - cocoapods
+- cocoapods
+before_script:
+- ./scripts/add-key.sh
+- ./scripts/update-bundle.sh
 script:
-  - xcodebuild -workspace Parking.xcworkspace -scheme Parking -sdk iphonesimulator test
+- xcodebuild -workspace Parking.xcworkspace -scheme Parking -sdk iphoneos -configuration Release OBJROOT=$PWD/build SYMROOT=$PWD/build ONLY_ACTIVE_ARCH=NO 'CODE_SIGN_RESOURCE_RULES_PATH=$(SDKROOT)/ResourceRules.plist'
+after_success:
+- ./scripts/sign-and-upload.sh
+after_script:
+- ./scripts/remove-key.sh
+env:
+  global:
+  - APP_NAME="Parking"
+  - 'DEVELOPER_NAME="iPhone Distribution: Vital Vinahradau (54KZKZ5JS4)"'
+  - PROFILE_NAME="AdHoc"
+  - secure: BM4wLYjqzpxNRDujhxPiG3yhr5389GiSY/TjRdHqfPYYJo2vY+4rZ856rYdkTOZLLojUTUivKS+FXNOIssj4uKbwq0o8JDN4fPaEb3OdAUMWAC+8d674t46hR0n3dgkaVkqzpOo27pOhT1H1h1owwlYbKT4oy4qrOR+yILWdNoXu8VnOA5ExuVwqp3F6keHaFe+xwzvo6FBsxx0Y366GqVom22C/FFDZ02GPJBegaGH/U+j7gjY3Bjw1lVomwDjUn8c5INTnQUYqQmz8BjVwa6sy8tYzO1kuUVN00tBSq8R4aT/OilMk89oVpRERrfQ3SY99XAIOQZzg4X7nkyrYreOAqNZ6j0tAxSJuxh+SPUKJO8BbyRSLkP9w5LmJUT/hdXKmdn1DbMfHZvNqG0WRv8gGclBJMuzfPCsUKeTXbFd3gOhwbfRFqHxLjPEbeM9K2uB0ouTj7xMc8Zaj8SArQWSsgq5fG4mGopy+rb0q1NxhAq0sAZ+mY2QCNKevqqJN4CTUt+kdjUVKI5eAQ0TKEY5xBwqBrBnM1lIScm0+89pj/bwymsnu9swGJ7uVSnIK0FmztsmWLHyjsvE4tAJ53GtV9p2YVjjE1dOkVI//G87MATZA86SKwtD4xeagTEY8C4/+Exp81v9oN5nyWxOXWVcZAk+8lm/Iz3/XHviwAL4=
+  - secure: wYwyC70Fkk+MPdc4GhtbsmqoaEUhtNc11vBB2/oM8H75HQ2CZVL7eBnrH6WHCDvFFZceJl6ckEH4+xAUd8ds7ONCSQLazPBjIibZRYZxzKPUSCDJdCBbNBYVwsRxtIh+etcpOLD/rYv1qDg3RkyUG04Kyo3cor3dl173Vxo4HSQOulWmKHXXbAU+w1jOvVVI4QiJn10OV2uhp1XAq6ViX8X8+oaBa+IglqkWJROfQUyWPKvLjXBAnGn0wXRHretSY30d53OUEs/63klud9+S95SWsMgHNjCbOdIjaZgKf88nYy3+m5Y8mOrI3jXdfu/kefafaRaIq1bxslG+YIUz19El//KzrBAMXYTLV1wbr7PsxiUwhplBnlMn1r5C5e6lUMYCaEVTK9JHNkJxhypVBzeGPUDSznR8o+Io86cU6lt4Hik/H9buJ6Xd4Xwd6EVDr2rzmYHvMZHLFvXmFzdZ+O7qOaVPMjMEBu/UoVwHbXSjsxGyUIpWNyiKiBW35Qr6ppQLwISzR6kEC2lU+MUb3GWKxaSwaYDA6L2WcsElNP/jf7NmjDe8uoeX0uPygYlmfXkQszkHVDVk+k7QeiG03MRKELeqoh7+G73FRZCcJe9ti0cYBHitJj/6x6pzlXn8ejRH090CNIwbwhvsBjkfh6xjstEZHR/jmecojThY88Y=
