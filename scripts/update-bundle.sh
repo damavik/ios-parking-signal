@@ -1,4 +1,14 @@
-#!/bin/sh
-openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/profile/AdHoc.mobileprovision.enc -d -a -out scripts/profile/AdHoc.mobileprovision
-openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/certs/dist.cer.enc -d -a -out scripts/certs/dist.cer
-openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/certs/dist.p12.enc -d -a -out scripts/certs/dist.p12
+if [ ! -z "$INFO_PLIST" ]; then
+  /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $TRAVIS_BUILD_NUMBER" "$INFO_PLIST"
+  echo "Set CFBundleVersion to $TRAVIS_BUILD_NUMBER"
+fi
+
+if [ ! -z "$BUNDLE_IDENTIFIER" ]; then
+  /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_IDENTIFIER" "$INFO_PLIST"
+  echo "Set CFBundleIdentifier to $BUNDLE_IDENTIFIER"
+fi
+
+if [ ! -z "$BUNDLE_DISPLAY_NAME" ]; then
+  /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $BUNDLE_DISPLAY_NAME" "$INFO_PLIST"
+  echo "Set CFBundleDisplayName to $BUNDLE_DISPLAY_NAME"
+fi
