@@ -7,6 +7,9 @@ language: objective-c
 osx_image: xcode7.3
 before_install:
 - rvm install 2.2.5
+- xctool --version
+- brew update
+- brew outdated xctool || brew upgrade xctool
 - pod install
 cache:
 - cocoapods
@@ -18,8 +21,10 @@ before_script:
 - openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/certs/debug.cer.enc -d -a -out scripts/certs/debug.cer
 - openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/certs/debug.p12.enc -d -a -out scripts/certs/debug.p12
 - ./scripts/add-key.sh
+- ./scripts/update-bundle.sh
 script:
-- xcodebuild -workspace Parking.xcworkspace -scheme Parking -sdk iphoneos -configuration Release OBJROOT=$PWD/build SYMROOT=$PWD/build ONLY_ACTIVE_ARCH=NO
+- xctool -workspace Parking.xcworkspace -scheme Parking -sdk iphonesimulator build test
+- xctool -workspace Parking.xcworkspace -scheme Parking -sdk iphoneos -configuration Release OBJROOT=$PWD/build SYMROOT=$PWD/build ONLY_ACTIVE_ARCH=NO
 after_success:
 - ./scripts/sign-and-upload.sh
 after_script:
