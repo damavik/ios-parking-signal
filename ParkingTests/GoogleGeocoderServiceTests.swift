@@ -12,7 +12,7 @@ import CoreLocation
 
 class GoogleGeocoderServiceImplementationTests: XCTestCase {
     
-    private var googleService: GeocoderService!
+    fileprivate var googleService: GeocoderService!
     
     override func setUp() {
         super.setUp()
@@ -25,7 +25,7 @@ class GoogleGeocoderServiceImplementationTests: XCTestCase {
     }
     
     func testMinskZavodskiRayon() {
-        let expectation = self.expectationWithDescription("reverse-geocoding")
+        let expectation = self.expectation(description: "reverse-geocoding")
         
         var originalAddress = Address()
         originalAddress.country = "Беларусь"
@@ -35,10 +35,10 @@ class GoogleGeocoderServiceImplementationTests: XCTestCase {
         originalAddress.streetNumber = "66/2"
         
         let location = CLLocation(latitude: 53.864505, longitude: 27.6811155)
-        self.googleService.fetchAddress(location, language: .Russian) { result -> Void in
+        self.googleService.fetchAddress(location, language: .russian) { result -> Void in
             
             switch result {
-            case GeocoderServiceResult.Success(let address):
+            case GeocoderServiceResult.success(let address):
                 XCTAssertEqual(originalAddress, address)
                 
             default:
@@ -48,11 +48,11 @@ class GoogleGeocoderServiceImplementationTests: XCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
     func testMinskFrunzenskiRayon() {
-        let expectation = self.expectationWithDescription("reverse-geocoding")
+        let expectation = self.expectation(description: "reverse-geocoding")
         
         var originalAddress = Address()
         originalAddress.country = "Беларусь"
@@ -62,10 +62,10 @@ class GoogleGeocoderServiceImplementationTests: XCTestCase {
         originalAddress.streetNumber = "18/1"
         
         let location = CLLocation(latitude: 53.898425, longitude: 27.450153)
-        self.googleService.fetchAddress(location, language: .Russian) { result -> Void in
+        self.googleService.fetchAddress(location, language: .russian) { result -> Void in
             
             switch result {
-            case GeocoderServiceResult.Success(let address):
+            case GeocoderServiceResult.success(let address):
                 XCTAssertEqual(originalAddress, address)
                 
             default:
@@ -75,6 +75,6 @@ class GoogleGeocoderServiceImplementationTests: XCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 }

@@ -11,7 +11,7 @@ import Photos
 
 class PhotosViewController: UICollectionViewController {
     
-    private lazy var photoService: PhotoStorageService = ServiceFactory.photoStorageService()
+    fileprivate lazy var photoService: PhotoStorageService = ServiceFactory.photoStorageService()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,18 +23,18 @@ class PhotosViewController: UICollectionViewController {
         self.collectionView!.reloadData()
         
         if (self.photoService.fetchResult.count > 0) {
-            self.collectionView!.scrollToItemAtIndexPath(NSIndexPath(forItem: self.photoService.fetchResult.count - 1, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Right, animated: false)
+            self.collectionView!.scrollToItem(at: IndexPath(item: self.photoService.fetchResult.count - 1, section: 0), at: UICollectionViewScrollPosition.right, animated: false)
         }
     }
     
     // MARK: UICollectionViewDataSource
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.photoService.fetchResult.count
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(PhotoCollectionViewCell.reusableIdentifier, forIndexPath: indexPath) as! PhotoCollectionViewCell
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCollectionViewCell.reusableIdentifier, for: indexPath) as! PhotoCollectionViewCell
         
         self.photoService.fetchResult[indexPath.row].fetchImage(cell.bounds.size) { result in
             cell.imageView?.image = result
@@ -45,11 +45,11 @@ class PhotosViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDelegate
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         ReportViewModel.instance.imageIndexes.append(indexPath.row)
     }
     
-    override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         ReportViewModel.instance.imageIndexes = ReportViewModel.instance.imageIndexes.filter() { $0 != indexPath.row }
     }
 }

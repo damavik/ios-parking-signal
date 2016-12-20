@@ -9,16 +9,16 @@
 import ObjectMapper
 
 enum LicensePlateValue : Equatable {
-    case Seria2004(LicensePlate)
-    case Custom(String)
+    case seria2004(LicensePlate)
+    case custom(String)
 }
 
 func ==(first: LicensePlateValue, second: LicensePlateValue) -> Bool {
     switch (first, second) {
-    case (.Seria2004(let first), .Seria2004(let second)) where first == second:
+    case (.seria2004(let first), .seria2004(let second)) where first == second:
         return true
         
-    case (.Custom(let first), .Custom(let second)) where first == second:
+    case (.custom(let first), .custom(let second)) where first == second:
         return true
         
     default:
@@ -29,7 +29,7 @@ func ==(first: LicensePlateValue, second: LicensePlateValue) -> Bool {
 struct Report : Mappable, Equatable {
     var reporter: Reporter!
     var offense: Offense!
-    var time: NSDate!
+    var time: Date!
     var licensePlate: LicensePlateValue!
     var address: AddressValue!
     var images: [UIImage]!
@@ -38,7 +38,7 @@ struct Report : Mappable, Equatable {
         // Nothing
     }
     
-    init?(_ map: Map) {
+    init?(map: Map) {
     }
     
     mutating func mapping(map: Map) {

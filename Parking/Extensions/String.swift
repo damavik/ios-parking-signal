@@ -9,15 +9,15 @@
 import Foundation
 
 extension String {
-    func subString(startIndex: Int, length: Int) -> String {
-        let start = self.startIndex.advancedBy(startIndex)
-        let end = self.startIndex.advancedBy(startIndex + length)
-        return self.substringWithRange(Range<String.Index>(start ..< end))
+    func subString(_ startIndex: Int, length: Int) -> String {
+        let start = self.characters.index(self.startIndex, offsetBy: startIndex)
+        let end = self.characters.index(self.startIndex, offsetBy: startIndex + length)
+        return self.substring(with: Range<String.Index>(start ..< end))
     }
 }
 
-infix operator =~ {}
+infix operator =~
 
 func =~(string: String, regex: String) -> Bool {
-    return string.rangeOfString(regex, options: .RegularExpressionSearch) != nil
+    return string.range(of: regex, options: .regularExpression) != nil
 }

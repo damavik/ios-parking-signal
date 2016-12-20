@@ -13,14 +13,14 @@ class ReportViewController: SignalViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var sendButton: UIButton!
     
-    private func updateViewModel() {
-        if let cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as? ReportTableViewFirstCell {
+    fileprivate func updateViewModel() {
+        if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ReportTableViewFirstCell {
             self.viewModel.licensePlate = cell.textField.text
         } else {
             Log("Failed to get license plate text field")
         }
         
-        if let cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as? ReportTableViewFirstCell {
+        if let cell = self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? ReportTableViewFirstCell {
             self.viewModel.addressString = cell.textField.text
         } else {
             Log("Failed to get address text field")
@@ -38,7 +38,7 @@ class ReportViewController: SignalViewController, UITableViewDelegate, UITableVi
 
     override func updateViewConstraints() {
         if (!self.didSetupConstraints) {
-            self.sendButton.snp_makeConstraints { make in
+            self.sendButton.snp.makeConstraints { make in
                 make.width.equalTo(self.view)
                 make.height.equalTo(62)
                 
@@ -46,11 +46,11 @@ class ReportViewController: SignalViewController, UITableViewDelegate, UITableVi
                 make.bottom.equalTo(self.view)
             }
             
-            self.tableView.snp_makeConstraints { make in
+            self.tableView.snp.makeConstraints { make in
                 make.width.equalTo(self.view)
                 
-                make.top.equalTo(self.view).offset(CGRectGetHeight(self.navigationController!.navigationBar.frame))
-                make.bottom.equalTo(self.sendButton.snp_top)
+                make.top.equalTo(self.view).offset(self.navigationController!.navigationBar.frame.height)
+                make.bottom.equalTo(self.sendButton.snp.top)
                 make.centerX.equalTo(self.view)
             }
         }
@@ -61,28 +61,28 @@ class ReportViewController: SignalViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        MZFormSheetPresentationController.appearance().contentViewSize = CGSizeMake(300, 400)
+        MZFormSheetPresentationController.appearance().contentViewSize = CGSize(width: 300, height: 400)
         MZFormSheetPresentationController.appearance().shouldCenterVertically = true
         MZFormSheetPresentationController.appearance().shouldDismissOnBackgroundViewTap = true
         
-        self.viewModel.date = NSDate()
+        self.viewModel.date = Date()
         
         AddressManager().fetchCurrentAddress{ result in
             switch result {
-            case AddressManagerResult.Success(let address):
+            case AddressManagerResult.success(let address):
                 self.viewModel.address = address
                 
-            case AddressManagerResult.Failure:
+            case AddressManagerResult.failure:
                 // TODO: review
                 Log("Failed to get fetch address")
             }
             
-            dispatch_async(dispatch_get_main_queue(), {
-                self.tableView.reloadRowsAtIndexPaths([ NSIndexPath(forRow: 1, inSection: 0) ], withRowAnimation: .Automatic)
+            DispatchQueue.main.async(execute: {
+                self.tableView.reloadRows(at: [ IndexPath(row: 1, section: 0) ], with: .automatic)
             })
         }
         
-        NSNotificationCenter.defaultCenter().addObserverForName(SendReportRequestNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (_) in
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: SendReportRequestNotification), object: nil, queue: OperationQueue.main) { [weak self] (_) in
             if let reportToSend = self?.viewModel.formReport() {
                 
                 let progressView = MRProgressOverlayView()
@@ -91,7 +91,7 @@ class ReportViewController: SignalViewController, UITableViewDelegate, UITableVi
                 progressView.show(true)
                 
                 ServiceFactory.apiEndpointService().uploadOffenseReport(reportToSend) { error in
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async(execute: {
                         progressView.hide(true)
                         
                         if let _ = error {
@@ -100,7 +100,7 @@ class ReportViewController: SignalViewController, UITableViewDelegate, UITableVi
                         } else {
                             Log("Succeed to upload report")
                             self?.showSuccessMark(nil)
-                            self?.navigationController?.popToRootViewControllerAnimated(true)
+                            _ = self?.navigationController?.popToRootViewController(animated: true)
                         }
                     })
                 }
@@ -108,10 +108,10 @@ class ReportViewController: SignalViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let tintColor = UIColor.blackColor()
+        let tintColor = UIColor.black
         
         self.navigationController?.navigationBar.tintColor = tintColor
         
@@ -119,26 +119,26 @@ class ReportViewController: SignalViewController, UITableViewDelegate, UITableVi
             navigationImageView.image = UIImage(named: "logo")?.tint(tintColor)
         }
         
-        UIApplication.sharedApplication().statusBarStyle = .Default
+        UIApplication.shared.statusBarStyle = .default
         
         if let _ = self.tableView.indexPathForSelectedRow {
-            self.tableView.deselectRowAtIndexPath((self.tableView.indexPathForSelectedRow)!, animated: false)
+            self.tableView.deselectRow(at: (self.tableView.indexPathForSelectedRow)!, animated: false)
         }
         
         self.tableView.reloadData()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.updateViewModel()
     }
     
-    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if (identifier == "ShowOffenseDisclaimer") {
             self.updateViewModel()
             
-            guard let licensePlate = self.viewModel.licensePlate where !licensePlate.isEmpty else {
-                dispatch_async(dispatch_get_main_queue(), { [weak self] in
+            guard let licensePlate = self.viewModel.licensePlate, !licensePlate.isEmpty else {
+                DispatchQueue.main.async(execute: { [weak self] in
                     Log("Attempt to create report without license plate specified")
                     self?.showFailureMark("Не указан номер")
                 })
@@ -146,8 +146,8 @@ class ReportViewController: SignalViewController, UITableViewDelegate, UITableVi
                 return false
             }
             
-            guard let address = self.viewModel.addressString where !address.isEmpty else {
-                dispatch_async(dispatch_get_main_queue(), { [weak self] in
+            guard let address = self.viewModel.addressString, !address.isEmpty else {
+                DispatchQueue.main.async(execute: { [weak self] in
                     Log("Attempt to create report without address specified")
                     self?.showFailureMark("Не указан адрес")
                 })
@@ -156,7 +156,7 @@ class ReportViewController: SignalViewController, UITableViewDelegate, UITableVi
             }
             
             guard let _ = self.viewModel.offense else {
-                dispatch_async(dispatch_get_main_queue(), { [weak self] in
+                DispatchQueue.main.async(execute: { [weak self] in
                     Log("Attempt to create report without offense specified")
                     self?.showFailureMark("Не указана статья")
                 })
@@ -170,25 +170,25 @@ class ReportViewController: SignalViewController, UITableViewDelegate, UITableVi
     
     // MARK: UITableViewDelegate
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath.row == 3) {
-            self.performSegueWithIdentifier("ShowOffensePicker", sender: self)
+            self.performSegue(withIdentifier: "ShowOffensePicker", sender: self)
         }
     }
     
     // MARK: UITableViewDataSource
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 4
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var result: UITableViewCell? = nil
         
         // FIXME: add proper localization for strings
         switch indexPath.row {
         case 0...1:
-            let cell = tableView.dequeueReusableCellWithIdentifier(ReportTableViewFirstCell.reusableIdentifier, forIndexPath: indexPath) as! ReportTableViewFirstCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: ReportTableViewFirstCell.reusableIdentifier, for: indexPath) as! ReportTableViewFirstCell
             
             cell.textField.text = ""
             if (indexPath.row == 0) {
@@ -211,13 +211,13 @@ class ReportViewController: SignalViewController, UITableViewDelegate, UITableVi
             result = cell
             
         case 2...3:
-            let cell = tableView.dequeueReusableCellWithIdentifier(ReportTableViewSecondCell.reusableIdentifier, forIndexPath: indexPath) as! ReportTableViewSecondCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: ReportTableViewSecondCell.reusableIdentifier, for: indexPath) as! ReportTableViewSecondCell
             
             if (indexPath.row == 2) {
                 cell.titleLabel.text = "Дата"
-                cell.valueLabel.text = self.viewModel.dateFormatter.stringFromDate(self.viewModel.date)
+                cell.valueLabel.text = self.viewModel.dateFormatter.string(from: self.viewModel.date)
                 
-                cell.selectionStyle = .None
+                cell.selectionStyle = .none
             } else {
                 cell.titleLabel.text = "Нарушение"
                 

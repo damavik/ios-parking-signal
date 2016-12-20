@@ -24,17 +24,17 @@ class LocationServiceTests: BaseTests {
     
     func testNotAuthorizedStatus() {
         class LocationManagerMock: CLLocationManager {
-            override private func startUpdatingLocation() {
+            override fileprivate func startUpdatingLocation() {
                 // Empty implementation
             }
         }
         
         // Restricted
-        let firstExpectation = self.expectationWithDescription("firstExpectation")
+        let firstExpectation = self.expectation(description: "firstExpectation")
         
         class LocationManagerRestrictedMock: LocationManagerMock {
             override class func authorizationStatus() -> CLAuthorizationStatus {
-                return .Restricted
+                return .restricted
             }
         }
 
@@ -43,29 +43,29 @@ class LocationServiceTests: BaseTests {
     
         serviceUnderTestFirst.fetchCurrentLocation { result -> Void in
             switch result {
-            case LocationServiceResult.Success(_):
+            case LocationServiceResult.success(_):
                 XCTFail("No location should be fetched")
                 
-            case LocationServiceResult.Failure(let error):
+            case LocationServiceResult.failure(let error):
                 XCTAssertNotNil(error)
                 
                 let errorValue = error as! LocationServiceError
-                XCTAssertEqual(errorValue, LocationServiceError.NotAuthorized)
+                XCTAssertEqual(errorValue, LocationServiceError.notAuthorized)
             }
             
             firstExpectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0) { error -> Void in
+        self.waitForExpectations(timeout: 5.0) { error -> Void in
             XCTAssertNil(error, "Expectation should succeed")
         }
         
         // Denied
-        let secondExpectation = self.expectationWithDescription("secondExpectation")
+        let secondExpectation = self.expectation(description: "secondExpectation")
         
         class LocationManagerDeniedMock: LocationManagerMock {
             override class func authorizationStatus() -> CLAuthorizationStatus {
-                return .Denied
+                return .denied
             }
         }
         
@@ -74,20 +74,20 @@ class LocationServiceTests: BaseTests {
         serviceUnderTestSecond.fetchCurrentLocation { result -> Void in
             
             switch result {
-            case LocationServiceResult.Success(_):
+            case LocationServiceResult.success(_):
                 XCTFail("No location should be fetched")
                 
-            case LocationServiceResult.Failure(let error):
+            case LocationServiceResult.failure(let error):
                 XCTAssertNotNil(error)
                 
                 let errorValue = error as! LocationServiceError
-                XCTAssertEqual(errorValue, LocationServiceError.NotAuthorized)
+                XCTAssertEqual(errorValue, LocationServiceError.notAuthorized)
             }
             
             secondExpectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0) { error -> Void in
+        self.waitForExpectations(timeout: 5.0) { error -> Void in
             XCTAssertNil(error, "Expectation should succeed")
         }
     }

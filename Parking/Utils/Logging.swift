@@ -8,7 +8,7 @@
 
 import Crashlytics
 
-public func Log(format: String, _ arguments: CVarArgType...) {
+public func Log(_ format: String, _ arguments: CVarArg...) {
     withVaList(arguments) {
 #if DEBUG
             CLSNSLogv(format, $0)

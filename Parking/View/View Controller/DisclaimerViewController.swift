@@ -16,7 +16,7 @@ class DisclaimerViewController: SignalViewController {
     
     override func updateViewConstraints() {
         if (!self.didSetupConstraints) {
-            self.continueButton.snp_makeConstraints { make in
+            self.continueButton.snp.makeConstraints { make in
                 make.width.equalTo(self.view)
                 make.height.equalTo(62)
                 
@@ -24,12 +24,12 @@ class DisclaimerViewController: SignalViewController {
                 make.bottom.equalTo(self.view)
             }
             
-            self.textView.snp_makeConstraints { make in
+            self.textView.snp.makeConstraints { make in
                 make.left.equalTo(self.view).offset(15)
                 make.right.equalTo(self.view).inset(15)
                 
                 make.top.equalTo(self.view)
-                make.bottom.equalTo(self.continueButton.snp_top)
+                make.bottom.equalTo(self.continueButton.snp.top)
             }
         }
         
@@ -38,12 +38,12 @@ class DisclaimerViewController: SignalViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Обратите внимание".uppercaseString
+        self.navigationItem.title = "Обратите внимание".uppercased()
     }
     
     //  MARK: Actions
     
-    @IBAction func onContinue(sender: AnyObject) {
+    @IBAction func onContinue(_ sender: AnyObject) {
         Log("Continue after disclaimer")
         
         // TODO

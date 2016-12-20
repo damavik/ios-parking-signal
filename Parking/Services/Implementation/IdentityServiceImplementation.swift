@@ -9,7 +9,7 @@
 import Foundation
 
 class IdentityServiceImplementation: IdentityService {
-    private lazy var defaults = NSUserDefaults.standardUserDefaults()
+    fileprivate lazy var defaults = UserDefaults.standard
     
     // MARK: IdentityService
     
@@ -45,12 +45,12 @@ class IdentityServiceImplementation: IdentityService {
     
     // MARK: Utils
     
-    private func getStringValue(key: String) -> String? {
-        return self.defaults.objectForKey(key) as? String
+    fileprivate func getStringValue(_ key: String) -> String? {
+        return self.defaults.object(forKey: key) as? String
     }
     
-    private func setValue(value: String?, key: String) {
-        self.defaults.setObject(value, forKey: key)
+    fileprivate func setValue(_ value: String?, key: String) {
+        self.defaults.set(value, forKey: key)
         self.defaults.synchronize()
     }
 }

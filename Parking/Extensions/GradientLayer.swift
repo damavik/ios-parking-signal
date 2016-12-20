@@ -10,41 +10,41 @@ import UIKit
 import SwiftHEXColors
 
 enum LayerShadingDirection {
-    case DirectionHorizontal
-    case DirectionVertical
-    case DirectionDiagonalBLTR
-    case DirectionDiagonalTLBR
+    case directionHorizontal
+    case directionVertical
+    case directionDiagonalBLTR
+    case directionDiagonalTLBR
 }
 
 extension CAGradientLayer {
     convenience init?(firstColor: UIColor, secondColor: UIColor, direction: LayerShadingDirection) {
         self.init()
         
-        let colors = [ firstColor.CGColor, secondColor.CGColor ]
+        let colors = [ firstColor.cgColor, secondColor.cgColor ]
         let locations = [ 0.0, 1.0 ]
         
         self.colors = colors
-        self.locations = locations
+        self.locations = locations as [NSNumber]?
         
         var startPoint: CGPoint
         var endPoint: CGPoint
         
         switch (direction) {
-        case .DirectionVertical:
-            startPoint = CGPointMake(0.5,0.0)
-            endPoint = CGPointMake(0.5,1.0)
+        case .directionVertical:
+            startPoint = CGPoint(x: 0.5,y: 0.0)
+            endPoint = CGPoint(x: 0.5,y: 1.0)
             
-        case .DirectionDiagonalBLTR:
-            startPoint = CGPointMake(0.0,1.0)
-            endPoint = CGPointMake(1.0,0.0)
+        case .directionDiagonalBLTR:
+            startPoint = CGPoint(x: 0.0,y: 1.0)
+            endPoint = CGPoint(x: 1.0,y: 0.0)
             
-        case .DirectionDiagonalTLBR:
-            startPoint = CGPointMake(0.0,0.0)
-            endPoint = CGPointMake(1.0,1.0)
+        case .directionDiagonalTLBR:
+            startPoint = CGPoint(x: 0.0,y: 0.0)
+            endPoint = CGPoint(x: 1.0,y: 1.0)
             
         default:
-            startPoint = CGPointMake(0.0,0.5)
-            endPoint = CGPointMake(1.0,0.5)
+            startPoint = CGPoint(x: 0.0,y: 0.5)
+            endPoint = CGPoint(x: 1.0,y: 0.5)
         }
         
         self.startPoint = startPoint

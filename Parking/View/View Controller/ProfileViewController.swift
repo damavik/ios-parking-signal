@@ -9,7 +9,7 @@
 import UIKit
 
 class ProfileViewController: SignalViewController, UITableViewDelegate, UITableViewDataSource {
-    private lazy var identityService = ServiceFactory.identityService()
+    fileprivate lazy var identityService = ServiceFactory.identityService()
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var saveButton: UIButton!
@@ -20,7 +20,7 @@ class ProfileViewController: SignalViewController, UITableViewDelegate, UITableV
         if (!self.didSetupConstraints) {
             self.tableView.rowHeight = 64
             
-            self.saveButton.snp_makeConstraints { make in
+            self.saveButton.snp.makeConstraints { make in
                 make.width.equalTo(self.view)
                 make.height.equalTo(62)
                 
@@ -28,13 +28,13 @@ class ProfileViewController: SignalViewController, UITableViewDelegate, UITableV
                 make.bottom.equalTo(self.view)
             }
             
-            self.tableView.snp_makeConstraints { make in
+            self.tableView.snp.makeConstraints { make in
                 make.width.equalTo(self.view)
                 make.centerX.equalTo(self.view)
                 
                 make.top.equalTo(self.view)
                 
-                make.bottom.equalTo(self.saveButton.snp_top)
+                make.bottom.equalTo(self.saveButton.snp.top)
             }
         }
         
@@ -44,23 +44,23 @@ class ProfileViewController: SignalViewController, UITableViewDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.hidesBackButton = true
-        self.navigationItem.title = "Контактные данные".uppercaseString
+        self.navigationItem.title = "Контактные данные".uppercased()
     }
     
     // MARK: UITableViewDelegate
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 64
     }
     
     // MARK: UITableViewDataSource
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(ProfileTableViewCell.reusableIdentifier, forIndexPath: indexPath) as! ProfileTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.reusableIdentifier, for: indexPath) as! ProfileTableViewCell
         
         let row = indexPath.row
         switch row {
@@ -68,22 +68,22 @@ class ProfileViewController: SignalViewController, UITableViewDelegate, UITableV
             cell.titleLabel.text = "ФИО"
             cell.textField.text = self.identityService.name
             cell.textField.placeholder = "Фамилия, имя, отчество"
-            cell.textField.keyboardType = .Default
-            cell.textField.autocapitalizationType = .Words
+            cell.textField.keyboardType = .default
+            cell.textField.autocapitalizationType = .words
             
         case 1:
             cell.titleLabel.text = "Адрес прописки"
             cell.textField.text = self.identityService.address
             cell.textField.placeholder = "Адрес прописки/регистрации"
-            cell.textField.keyboardType = .Default
-            cell.textField.autocapitalizationType = .None
+            cell.textField.keyboardType = .default
+            cell.textField.autocapitalizationType = .none
             
         case 2:
             cell.titleLabel.text = "E-mail"
             cell.textField.text = self.identityService.email
             cell.textField.placeholder = "Электронный ящик"
-            cell.textField.keyboardType = .EmailAddress
-            cell.textField.autocapitalizationType = .None
+            cell.textField.keyboardType = .emailAddress
+            cell.textField.autocapitalizationType = .none
             
         default:
             cell.titleLabel.text = nil
@@ -95,26 +95,26 @@ class ProfileViewController: SignalViewController, UITableViewDelegate, UITableV
     
     //  MARK: Actions
     
-    @IBAction func onSave(sender: AnyObject) {
+    @IBAction func onSave(_ sender: AnyObject) {
         Log("Profile save initiated")
         
-        if let cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as? ProfileTableViewCell {
+        if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileTableViewCell {
             self.viewModel.reporterName = cell.textField.text
             self.identityService.name = self.viewModel.reporterName
         }
         
-        if let cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as? ProfileTableViewCell {
+        if let cell = self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? ProfileTableViewCell {
             self.viewModel.reporterResidenceAddress = cell.textField.text
             self.identityService.address = self.viewModel.reporterResidenceAddress
         }
         
-        if let cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as? ProfileTableViewCell {
+        if let cell = self.tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? ProfileTableViewCell {
             self.viewModel.reporterEmail = cell.textField.text
             self.identityService.email = self.viewModel.reporterEmail
         }
         
-        self.dismissViewControllerAnimated(true) {
-            NSNotificationCenter.defaultCenter().postNotificationName(SendReportRequestNotification, object: nil)
+        self.dismiss(animated: true) {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: SendReportRequestNotification), object: nil)
         }
     }
 }

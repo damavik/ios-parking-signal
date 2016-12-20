@@ -39,8 +39,8 @@ extension Address {
 class ReportViewModel {
     static var instance = ReportViewModel()
     
-    let dateFormatter: NSDateFormatter
-    var date: NSDate!
+    let dateFormatter: DateFormatter
+    var date: Date!
     
     var licensePlate: String?
     var address: Address?
@@ -52,8 +52,8 @@ class ReportViewModel {
     var reporterResidenceAddress: String?
     var reporterEmail: String?
     
-    private init() {
-        self.dateFormatter = NSDateFormatter()
+    fileprivate init() {
+        self.dateFormatter = DateFormatter()
         self.dateFormatter.dateFormat = "d MMMM, HH:mm"
     }
     
@@ -97,9 +97,9 @@ class ReportViewModel {
         
         var addressValue: AddressValue?
         if let address = self.address {
-            addressValue = AddressValue.Full(address)
+            addressValue = AddressValue.full(address)
         } else if let addressString = self.addressString {
-            addressValue = AddressValue.Custom(addressString)
+            addressValue = AddressValue.custom(addressString)
         }
         
         if (addressValue == nil) {
@@ -113,9 +113,9 @@ class ReportViewModel {
         result.offense = offense
         
         if let licensePlate = LicensePlate(licensePlateString) {
-            result.licensePlate = LicensePlateValue.Seria2004(licensePlate)
+            result.licensePlate = LicensePlateValue.seria2004(licensePlate)
         } else {
-            result.licensePlate = LicensePlateValue.Custom(licensePlateString)
+            result.licensePlate = LicensePlateValue.custom(licensePlateString)
         }
         
         result.address = addressValue!

@@ -12,28 +12,28 @@ struct LicensePlateTranform : TransformType {
     typealias Object = LicensePlateValue
     typealias JSON = String
     
-    func transformFromJSON(value: AnyObject?) -> Object? {
+    func transformFromJSON(_ value: Any?) -> Object? {
         guard let stringValue = value as? String else {
             return nil
         }
         
         guard let plate = LicensePlate(stringValue) else {
-            return .Custom(stringValue)
+            return .custom(stringValue)
         }
         
-        return .Seria2004(plate)
+        return .seria2004(plate)
     }
     
-    func transformToJSON(value: Object?) -> JSON? {
+    func transformToJSON(_ value: Object?) -> JSON? {
         guard let plateValue = value else {
             return nil
         }
         
         switch plateValue {
-        case .Seria2004(let plate):
+        case .seria2004(let plate):
             return plate.string
             
-        case .Custom(let string):
+        case .custom(let string):
             return string
         }
     }

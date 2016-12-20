@@ -37,27 +37,27 @@ class SignalViewController: UIViewController {
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         if (self.brandedNavigationBar) {
             
             if let navigationController = self.navigationController {
                 navigationController.navigationBar.makeTransparent()
-                navigationController.navigationBar.tintColor = UIColor.whiteColor()
+                navigationController.navigationBar.tintColor = UIColor.white
             }
             
-            UIApplication.sharedApplication().statusBarStyle = .LightContent
+            UIApplication.shared.statusBarStyle = .lightContent
         } else {
             
             if let navigationController = self.navigationController {
                 navigationController.navigationBar.makeDefault()
-                navigationController.navigationBar.translucent = false
-                navigationController.navigationBar.tintColor = UIColor.blackColor()
-                navigationController.navigationBar.barTintColor = UIColor.whiteColor()
+                navigationController.navigationBar.isTranslucent = false
+                navigationController.navigationBar.tintColor = UIColor.black
+                navigationController.navigationBar.barTintColor = UIColor.white
             }
             
-            UIApplication.sharedApplication().statusBarStyle = .Default
+            UIApplication.shared.statusBarStyle = .default
         }
     }
     
@@ -66,40 +66,40 @@ class SignalViewController: UIViewController {
         super.updateViewConstraints()
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        super.prepareForSegue(segue, sender: sender)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
         
         if let segueId = segue.identifier {
             Log("Prepare for seque '%@'", segueId)
         }
     }
     
-    private func perform(block: Void -> Void, delay: NSTimeInterval) {
-        let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC)))
-        dispatch_after(popTime, dispatch_get_main_queue(), block)
+    fileprivate func perform(_ block: @escaping (Void) -> Void, delay: TimeInterval) {
+        let popTime = DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: popTime, execute: block)
     }
     
-    func showSuccessMark(message: String?) {
-        let progressView = MRProgressOverlayView.showOverlayAddedTo(self.view.window, animated: true)
-        progressView.mode = .Checkmark
-        progressView.titleLabelText = message ?? "Завершено"
+    func showSuccessMark(_ message: String?) {
+        let progressView = MRProgressOverlayView.showOverlayAdded(to: self.view.window, animated: true)
+        progressView?.mode = .checkmark
+        progressView?.titleLabelText = message ?? "Завершено"
         
-        if (progressView.accessibilityLabel == nil) {
-            progressView.accessibilityLabel = progressView.titleLabelText
+        if (progressView?.accessibilityLabel == nil) {
+            progressView?.accessibilityLabel = progressView?.titleLabelText
         }
         
-        self.perform({ progressView.hide(true) }, delay: 1.5)
+        self.perform({ progressView?.hide(true) }, delay: 1.5)
     }
     
-    func showFailureMark(message: String?) {
-        let progressView = MRProgressOverlayView.showOverlayAddedTo(self.view.window, animated: true)
-        progressView.mode = .Cross
-        progressView.titleLabelText = message ?? "Произошла ошибка"
+    func showFailureMark(_ message: String?) {
+        let progressView = MRProgressOverlayView.showOverlayAdded(to: self.view.window, animated: true)
+        progressView?.mode = .cross
+        progressView?.titleLabelText = message ?? "Произошла ошибка"
         
-        if (progressView.accessibilityLabel == nil) {
-            progressView.accessibilityLabel = progressView.titleLabelText
+        if (progressView?.accessibilityLabel == nil) {
+            progressView?.accessibilityLabel = progressView?.titleLabelText
         }
         
-        self.perform({ progressView.hide(true) }, delay: 1.5)
+        self.perform({ progressView?.hide(true) }, delay: 1.5)
     }
 }

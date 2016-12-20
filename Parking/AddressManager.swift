@@ -8,18 +8,18 @@
 
 import Foundation
 
-enum AddressManagerError: ErrorType {
-    case Unknown(NSError?)
+enum AddressManagerError: Error {
+    case unknown(NSError?)
 }
 
 enum AddressManagerResult {
-    case Success(Address?)
-    case Failure(ErrorType)
+    case success(Address?)
+    case failure(Error)
 }
 
 class AddressManager : NSObject {    
-    private let locationService: LocationService!
-    private let geocoderService: GeocoderService!
+    fileprivate let locationService: LocationService!
+    fileprivate let geocoderService: GeocoderService!
     
     init(locationService: LocationService, geocoderService: GeocoderService) {
         self.locationService = locationService
@@ -37,25 +37,25 @@ class AddressManager : NSObject {
         self.init(locationService: locationService, geocoderService: geocoderService)
     }
     
-    func fetchCurrentAddress(callback: (AddressManagerResult) -> Void) {
+    func fetchCurrentAddress(_ callback: @escaping (AddressManagerResult) -> Void) {
         
         self.locationService.fetchCurrentLocation { locationResult -> Void in
             
             switch locationResult {
-            case LocationServiceResult.Success(let location?):
+            case LocationServiceResult.success(let location?):
                 
-                self.geocoderService.fetchAddress(location, language: GeocoderServiceLanguage.Russian, callback: { result -> Void in
+                self.geocoderService.fetchAddress(location, language: GeocoderServiceLanguage.russian, callback: { result -> Void in
                     switch result {
-                    case GeocoderServiceResult.Success(let address):
-                        callback(AddressManagerResult.Success(address))
+                    case GeocoderServiceResult.success(let address):
+                        callback(AddressManagerResult.success(address))
                         
-                    case GeocoderServiceResult.Failure(let error):
-                        callback(AddressManagerResult.Failure(error))
+                    case GeocoderServiceResult.failure(let error):
+                        callback(AddressManagerResult.failure(error))
                     }
                 })
                 
-            case LocationServiceResult.Failure(let error):
-                callback(AddressManagerResult.Failure(error))
+            case LocationServiceResult.failure(let error):
+                callback(AddressManagerResult.failure(error))
                 
             default:
                 break

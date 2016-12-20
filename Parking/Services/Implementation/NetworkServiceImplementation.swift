@@ -15,17 +15,15 @@ extension Request : Disposable {
 }
 
 final class NetworkServiceImplementation : NetworkService {
-    
-    func request(method: Method, url: String, parameters: [String: AnyObject]?, callback: NetworkServiceResult<AnyObject> -> Void) -> Disposable? {
+    internal func request(_ method: Method, url: String, parameters: [String : Any]?, callback: @escaping (NetworkServiceResult<Any>) -> Void) -> Disposable? {
         
-        return Alamofire.request(.GET, url, parameters: parameters, encoding: .URLEncodedInURL, headers: nil).responseJSON(completionHandler: { response in
-            
+        return Alamofire.request(url, method: .get, parameters: parameters).validate().responseJSON(completionHandler: { (response) in
             switch (response.result) {
-            case let Result.Success(data):
-                callback(NetworkServiceResult.Success(data))
+            case .success(let data):
+                callback(NetworkServiceResult.success(data))
                 
-            case let Result.Failure(error):
-                callback(NetworkServiceResult.Failure(error))
+            case .failure(let error):
+                callback(NetworkServiceResult.failure(error))
             }
         })
     }

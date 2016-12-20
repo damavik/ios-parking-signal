@@ -15,10 +15,10 @@ enum Method: String {
 }
 
 enum NetworkServiceResult<A> {
-    case Success(A)
-    case Failure(ErrorType)
+    case success(A)
+    case failure(Error)
 }
 
 protocol NetworkService {
-    func request(method: Method, url: String, parameters: [String: AnyObject]?, callback: NetworkServiceResult<AnyObject> -> Void) -> Disposable?
+    func request(_ method: Method, url: String, parameters: [String: Any]?, callback: @escaping (NetworkServiceResult<Any>) -> Void) -> Disposable?
 }

@@ -14,9 +14,9 @@ class OffenseTableViewCell: UITableViewCell {
     @IBOutlet weak var selectionMark: UIImageView!
     @IBOutlet weak var valueLabel: UILabel!
     
-    override var selected: Bool {
+    override var isSelected: Bool {
         didSet {
-            if self.selected {
+            if self.isSelected {
                 self.selectionMark.image = UIImage(named: "selection-mark")
             } else {
                 self.selectionMark.image = nil
@@ -27,18 +27,18 @@ class OffenseTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.contentView.snp_makeConstraints { make in
+        self.contentView.snp.makeConstraints { make in
             make.height.equalTo(self.valueLabel).offset(20)
         }
         
-        self.selectionMark.snp_makeConstraints { make in
-            make.size.equalTo(CGSizeMake(20, 15))
+        self.selectionMark.snp.makeConstraints { make in
+            make.size.equalTo(CGSize(width: 20.0, height: 15.0))
             make.top.equalTo(self).offset(10)
             make.left.equalTo(self).offset(20)
         }
         
-        self.valueLabel.snp_makeConstraints { make in
-            make.left.equalTo(self.selectionMark.snp_right).offset(10)
+        self.valueLabel.snp.makeConstraints { make in
+            make.left.equalTo(self.selectionMark.snp.right).offset(10)
             make.right.equalTo(self).inset(20)
             make.top.equalTo(self.selectionMark)
             make.bottom.equalTo(self).inset(10)

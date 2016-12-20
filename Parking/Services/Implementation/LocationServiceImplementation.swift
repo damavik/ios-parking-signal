@@ -9,9 +9,9 @@
 import CoreLocation
 
 final class LocationServiceImplementation : NSObject, CLLocationManagerDelegate, LocationService, Disposable {
-    private var locationManager: CLLocationManager!
-    private var callback: (LocationServiceResult -> Void)!
-    private var desiredAccuracy: Double
+    fileprivate var locationManager: CLLocationManager!
+    fileprivate var callback: ((LocationServiceResult) -> Void)!
+    fileprivate var desiredAccuracy: Double
     
     init(manager: CLLocationManager, accuracy: Double) {
         self.locationManager = manager
@@ -27,7 +27,7 @@ final class LocationServiceImplementation : NSObject, CLLocationManagerDelegate,
         self.init(accuracy: 100)
     }
     
-    func fetchCurrentLocation(callback: LocationServiceResult -> Void) -> Disposable? {
+    internal func fetchCurrentLocation(_ callback: @escaping (LocationServiceResult) -> Void) -> Disposable? {
         
         Log("Current location fetch initiated")
         
@@ -36,22 +36,22 @@ final class LocationServiceImplementation : NSObject, CLLocationManagerDelegate,
         self.locationManager.desiredAccuracy = self.desiredAccuracy
         self.locationManager.delegate = self
         
-        let authorizationStatus = self.locationManager!.dynamicType.authorizationStatus()
+        let authorizationStatus = type(of: self.locationManager!).authorizationStatus()
         
-        if (authorizationStatus == .NotDetermined) {
+        if (authorizationStatus == .notDetermined) {
             Log("Location services authorization status not determined")
             
-            if let _ = NSBundle.mainBundle().objectForInfoDictionaryKey("NSLocationAlwaysUsageDescription") {
+            if let _ = Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysUsageDescription") {
                 Log("Location services 'NSLocationAlwaysUsageDescription' key found")
                 self.locationManager.requestAlwaysAuthorization()
                 
-            } else if let _ = NSBundle.mainBundle().objectForInfoDictionaryKey("NSLocationWhenInUseUsageDescription") {
+            } else if let _ = Bundle.main.object(forInfoDictionaryKey: "NSLocationWhenInUseUsageDescription") {
                 Log("Location services 'NSLocationWhenInUseUsageDescription' key found")
                 self.locationManager.requestWhenInUseAuthorization()
                 
             } else {
                 Log("No location usage description key found")
-                self.callback(LocationServiceResult.Failure(LocationServiceError.Unknown))
+                self.callback(LocationServiceResult.failure(LocationServiceError.unknown))
                 self.callback = nil
             }
         } else {
@@ -62,14 +62,14 @@ final class LocationServiceImplementation : NSObject, CLLocationManagerDelegate,
         return self
     }
     
-    private func handleAuthorizationStatus(status: CLAuthorizationStatus) {
+    fileprivate func handleAuthorizationStatus(_ status: CLAuthorizationStatus) {
         switch status {
             
-        case .Denied, .Restricted:
-            self.callback(LocationServiceResult.Failure(LocationServiceError.NotAuthorized))
+        case .denied, .restricted:
+            self.callback(LocationServiceResult.failure(LocationServiceError.notAuthorized))
             self.callback = nil
             
-        case .AuthorizedAlways, .AuthorizedWhenInUse:
+        case .authorizedAlways, .authorizedWhenInUse:
             self.locationManager.startUpdatingLocation()
             
         default:
@@ -79,25 +79,25 @@ final class LocationServiceImplementation : NSObject, CLLocationManagerDelegate,
     
     //  MARK: CLLocationManagerDelegate
     
-    @objc func locationManager(_: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    @objc func locationManager(_: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         self.handleAuthorizationStatus(status)
     }
     
     @objc func locationManager(_: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let accurateEnoughLocations = locations.filter { $0.horizontalAccuracy <= self.desiredAccuracy }.sort { (first: CLLocation, second: CLLocation) -> Bool in
+        let accurateEnoughLocations = locations.filter { $0.horizontalAccuracy <= self.desiredAccuracy }.sorted { (first: CLLocation, second: CLLocation) -> Bool in
             return first.horizontalAccuracy < second.horizontalAccuracy
         }
         
         if let mostAccurateLocation = accurateEnoughLocations.first {
             self.locationManager.stopUpdatingLocation()
-            self.callback(LocationServiceResult.Success(mostAccurateLocation))
+            self.callback(LocationServiceResult.success(mostAccurateLocation))
             self.callback = nil
         }
     }
     
-    @objc func locationManager(_: CLLocationManager, didFailWithError error: NSError) {
+    @objc func locationManager(_: CLLocationManager, didFailWithError error: Error) {
         // FIXME: handle actual NSError value
-        self.callback(LocationServiceResult.Failure(LocationServiceError.NotAuthorized))
+        self.callback(LocationServiceResult.failure(LocationServiceError.notAuthorized))
     }
     
     //  MARK: Disposable

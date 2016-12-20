@@ -24,7 +24,7 @@ class PhotoCaptureServiceImplementation : NSObject, PhotoCaptureService {
                 return false
             }
             
-            return device.hasFlash && device.flashAvailable
+            return device.hasFlash && device.isFlashAvailable
         }
     }
     
@@ -34,7 +34,7 @@ class PhotoCaptureServiceImplementation : NSObject, PhotoCaptureService {
                 return false
             }
             
-            return device.flashMode == .Auto || device.flashMode == .On
+            return device.flashMode == .auto || device.flashMode == .on
         }
         
         set(enabled) {
@@ -45,27 +45,27 @@ class PhotoCaptureServiceImplementation : NSObject, PhotoCaptureService {
                 
                 do {
                     try device.lockForConfiguration()
-                    device.flashMode = enabled ? .Auto : .Off
+                    device.flashMode = enabled ? .auto : .off
                     device.unlockForConfiguration()
                 } catch {
-                    Log("Failed to set flash enabled to value '%d'", enabled)
+                    Log("Failed to set flash enabled to value '%d'", enabled as CVarArg)
                 }
             } else {
-                Log("Failed to set flash enabled to value '%d' for a device without flash available", enabled)
+                Log("Failed to set flash enabled to value '%d' for a device without flash available", enabled as CVarArg)
             }
         }
     }
     
-    private var captureSession: AVCaptureSession?
+    fileprivate var captureSession: AVCaptureSession?
     
-    private var captureDevice: AVCaptureDevice? {
+    fileprivate var captureDevice: AVCaptureDevice? {
         get {
             return (self.session?.inputs.last as? AVCaptureDeviceInput)?.device
         }
     }
     
-    private lazy var stillImageOutput = AVCaptureStillImageOutput()
-    private var captureCallback: (NSError? -> Void)!
+    fileprivate lazy var stillImageOutput = AVCaptureStillImageOutput()
+    fileprivate var captureCallback: ((NSError?) -> Void)!
     
     override init() {
         super.init()
@@ -79,28 +79,28 @@ class PhotoCaptureServiceImplementation : NSObject, PhotoCaptureService {
     
     // MARK: PhotoCaptureService
     
-    func capturePhoto(completion: NSError? -> Void) -> Void {
+    func capturePhoto(_ completion: @escaping (NSError?) -> Void) -> Void {
         
-        if let videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo) {
+        if let videoConnection = self.stillImageOutput.connection(withMediaType: AVMediaTypeVideo) {
             Log("Photo capture requested")
             
             self.captureCallback = completion
             
-            self.stillImageOutput.captureStillImageAsynchronouslyFromConnection(videoConnection) {
+            self.stillImageOutput.captureStillImageAsynchronously(from: videoConnection) {
                 imageDataSampleBuffer, error in
                 if (error == nil) {
                     Log("Sucessfully captured photo")
                     
                     let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
-                    let image = UIImage(data: imageData)
+                    let image = UIImage(data: imageData!)
                     
                     UIImageWriteToSavedPhotosAlbum(image!,
                                                    self,
                                                    #selector(PhotoCaptureServiceImplementation.image(_:didFinishSavingWithError:contextInfo:)),
                                                    nil)
                 } else {
-                    Log("Failed to capture photo with error '%@'", error)
-                    self.captureCallback!(error)
+                    Log("Failed to capture photo with error '%@'", error as! CVarArg)
+                    self.captureCallback!(error as NSError?)
                     self.captureCallback = nil
                 }
             }
@@ -110,18 +110,18 @@ class PhotoCaptureServiceImplementation : NSObject, PhotoCaptureService {
         }
     }
     
-    private func startSession(inout imageOutput: AVCaptureStillImageOutput) -> AVCaptureSession? {
+    fileprivate func startSession(_ imageOutput: inout AVCaptureStillImageOutput) -> AVCaptureSession? {
         Log("Photo capture session start requested")
         
         var captureDevice: AVCaptureDevice?
         
         let devices = AVCaptureDevice.devices()
         
-        for device in devices {
+        for device in devices! {
             // Make sure this particular device supports video
-            if (device.hasMediaType(AVMediaTypeVideo)) {
+            if ((device as AnyObject).hasMediaType(AVMediaTypeVideo)) {
                 // Finally check the position and confirm we've got the back camera
-                if (device.position == AVCaptureDevicePosition.Back) {
+                if ((device as AnyObject).position == AVCaptureDevicePosition.back) {
                     captureDevice = device as? AVCaptureDevice
                 }
             }
@@ -152,7 +152,7 @@ class PhotoCaptureServiceImplementation : NSObject, PhotoCaptureService {
         return session
     }
     
-    @objc func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafeRawPointer) {
         if let _ = self.captureCallback {
             self.captureCallback!(error)
             self.captureCallback = nil

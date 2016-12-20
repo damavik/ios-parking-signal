@@ -8,16 +8,16 @@
 
 import CoreLocation
 
-enum LocationServiceError: ErrorType {
-    case Unknown
-    case NotAuthorized
+enum LocationServiceError: Error {
+    case unknown
+    case notAuthorized
 }
 
 enum LocationServiceResult {
-    case Success(CLLocation?)
-    case Failure(ErrorType)
+    case success(CLLocation?)
+    case failure(Error)
 }
 
 protocol LocationService {
-    func fetchCurrentLocation(callback: LocationServiceResult -> Void) -> Disposable?
+    @discardableResult func fetchCurrentLocation(_ callback: @escaping (LocationServiceResult) -> Void) -> Disposable?
 }

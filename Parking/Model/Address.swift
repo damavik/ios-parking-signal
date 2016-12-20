@@ -9,16 +9,16 @@
 import ObjectMapper
 
 enum AddressValue : Equatable {
-    case Full(Address)
-    case Custom(String)
+    case full(Address)
+    case custom(String)
 }
 
 func ==(first: AddressValue, second: AddressValue) -> Bool {
     switch (first, second) {
-    case (.Full(let first), .Full(let second)) where first == second:
+    case (.full(let first), .full(let second)) where first == second:
         return true
         
-    case (.Custom(let first), .Custom(let second)) where first == second:
+    case (.custom(let first), .custom(let second)) where first == second:
         return true
         
     default:
@@ -38,7 +38,7 @@ struct Address : Mappable, Equatable {
         // Nothing
     }
     
-    init?(_ map: Map) {
+    init?(map: Map) {
     }
     
     mutating func mapping(map: Map) {

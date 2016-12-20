@@ -17,14 +17,14 @@ class ProfileTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.titleLabel.snp_makeConstraints { make in
+        self.titleLabel.snp.makeConstraints { make in
             make.height.equalTo(self).multipliedBy(0.5)
             make.left.equalTo(16)
             make.right.equalTo(16)
             make.top.equalTo(self)
         }
         
-        self.textField.snp_makeConstraints { make in
+        self.textField.snp.makeConstraints { make in
             make.height.equalTo(self).multipliedBy(0.5)
             make.left.equalTo(16)
             make.right.equalTo(16)

@@ -9,18 +9,18 @@
 import UIKit
 
 enum PhotoStorageServiceAccessStatus: Int {
-    case Forbidden
-    case Authorized
+    case forbidden
+    case authorized
 }
 
 protocol PhotoResult {
-    func fetchImage(targetSize: CGSize, callback: UIImage? -> Void) -> Disposable?
+    @discardableResult func fetchImage(_ targetSize: CGSize, callback: @escaping (UIImage?) -> Void) -> Disposable?
 }
 
 protocol PhotoStorageService {
     var fetchResult: [PhotoResult] { get }
     var accessStatus: PhotoStorageServiceAccessStatus { get }
-    var accessStatusChangeCallback: (PhotoStorageServiceAccessStatus -> Void)? { get set }
+    var accessStatusChangeCallback: ((PhotoStorageServiceAccessStatus) -> Void)? { get set }
     func grantAccess()
-    func fetchLastPhoto(targetSize: CGSize, callback: UIImage? -> Void) -> Disposable?
+    @discardableResult func fetchLastPhoto(_ targetSize: CGSize, callback: @escaping (UIImage?) -> Void) -> Disposable?
 }

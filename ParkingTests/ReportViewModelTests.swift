@@ -57,10 +57,10 @@ class ReportViewModelTests: XCTestCase {
         XCTAssertNotNil(report)
     }
     
-    private func getFilledViewModel() -> ReportViewModel {
+    fileprivate func getFilledViewModel() -> ReportViewModel {
         let result = ReportViewModel.instance
         
-        result.date = NSDate()
+        result.date = Date()
         result.licensePlate = "1234 MM-7"
         result.addressString = "улица Ангарская, 11-2-77"
         

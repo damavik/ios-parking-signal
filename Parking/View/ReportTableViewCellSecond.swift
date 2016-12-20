@@ -18,19 +18,19 @@ class ReportTableViewSecondCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.titleLabel.snp_makeConstraints{ make in
+        self.titleLabel.snp.makeConstraints{ make in
             make.centerY.equalTo(self)
             make.left.equalTo(self).offset(20)
             make.width.equalTo(self).multipliedBy(0.4)
         }
         
-        self.valueLabel.snp_makeConstraints { make in
+        self.valueLabel.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.right.equalTo(self).inset(20)
             make.width.equalTo(self).multipliedBy(0.6)
         }
         
-        self.seporatorView.snp_makeConstraints { make in
+        self.seporatorView.snp.makeConstraints { make in
             make.bottom.equalTo(self)
             make.left.equalTo(self).offset(20)
             make.right.equalTo(self).inset(20)

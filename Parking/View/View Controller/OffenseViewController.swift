@@ -13,8 +13,8 @@ class OffenseViewController: SignalViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var selectButton: UIButton!
     
-    private var offenses = [Offense]()
-    private var selectedOffenseIndex: Int?
+    fileprivate var offenses = [Offense]()
+    fileprivate var selectedOffenseIndex: Int?
     
     override var brandedNavigationBar: Bool { get { return false } }
     
@@ -23,7 +23,7 @@ class OffenseViewController: SignalViewController, UITableViewDelegate, UITableV
             self.tableView.estimatedRowHeight = UITableViewAutomaticDimension
             self.tableView.rowHeight = UITableViewAutomaticDimension
             
-            self.selectButton.snp_makeConstraints { make in
+            self.selectButton.snp.makeConstraints { make in
                 make.width.equalTo(self.view)
                 make.height.equalTo(62)
                 
@@ -31,12 +31,12 @@ class OffenseViewController: SignalViewController, UITableViewDelegate, UITableV
                 make.bottom.equalTo(self.view)
             }
             
-            self.tableView.snp_makeConstraints { make in
+            self.tableView.snp.makeConstraints { make in
                 make.width.equalTo(self.view)
                 make.centerX.equalTo(self.view)
                 
                 make.top.equalTo(self.view)
-                make.bottom.equalTo(self.selectButton.snp_top)
+                make.bottom.equalTo(self.selectButton.snp.top)
             }
         }
         
@@ -52,9 +52,9 @@ class OffenseViewController: SignalViewController, UITableViewDelegate, UITableV
             if let offenses = result {
                 self.offenses = offenses
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     if let offence = self.viewModel.offense {
-                        self.selectedOffenseIndex = self.offenses.indexOf(offence)!
+                        self.selectedOffenseIndex = self.offenses.index(of: offence)!
                     }
                     
                     self.tableView.reloadData()
@@ -65,37 +65,37 @@ class OffenseViewController: SignalViewController, UITableViewDelegate, UITableV
     
     // MARK: UITableViewDelegate
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.selectedOffenseIndex = indexPath.row
         self.tableView.reloadData()
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
     }
     
     // MARK: UITableViewDataSource
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.offenses.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(OffenseTableViewCell.reusableIdentifier, forIndexPath: indexPath) as! OffenseTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: OffenseTableViewCell.reusableIdentifier, for: indexPath) as! OffenseTableViewCell
         
         let row = indexPath.row
         
-        cell.selected = (row == self.selectedOffenseIndex)
+        cell.isSelected = (row == self.selectedOffenseIndex)
         
         let offense = self.offenses[row]
         
         let result = NSMutableAttributedString(attributedString: NSAttributedString(string: offense.article, attributes: [ NSForegroundColorAttributeName : UIColor(hexString: "#356094")! ]))
-        result.appendAttributedString(NSAttributedString(string: "\n"))
-        result.appendAttributedString(NSAttributedString(string: offense.text))
+        result.append(NSAttributedString(string: "\n"))
+        result.append(NSAttributedString(string: offense.text))
         
         cell.valueLabel.attributedText = result
         
@@ -104,13 +104,13 @@ class OffenseViewController: SignalViewController, UITableViewDelegate, UITableV
     
     //  MARK: Actions
     
-    @IBAction func onSelect(sender: AnyObject) {
+    @IBAction func onSelect(_ sender: AnyObject) {
         Log("Offense selection performed")
         
         if let _ = self.selectedOffenseIndex {
             self.viewModel.offense = self.offenses[self.selectedOffenseIndex!]
         }
         
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 }

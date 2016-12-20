@@ -18,32 +18,32 @@ class StartViewController: SignalViewController {
     @IBOutlet weak var shootButton: UIButton!
     @IBOutlet weak var lastPhotoButton: UIButton!
     
-    private lazy var photoStorageService: PhotoStorageService = ServiceFactory.photoStorageService()
-    private lazy var photoCaptureService: PhotoCaptureService = ServiceFactory.photoCaptureService()
+    fileprivate lazy var photoStorageService: PhotoStorageService = ServiceFactory.photoStorageService()
+    fileprivate lazy var photoCaptureService: PhotoCaptureService = ServiceFactory.photoCaptureService()
 
-    private var previewLayer : AVCaptureVideoPreviewLayer!
+    fileprivate var previewLayer : AVCaptureVideoPreviewLayer!
     
     override func updateViewConstraints() {
         if (!self.didSetupConstraints) {
-            self.bottomView.snp_makeConstraints { make in
+            self.bottomView.snp.makeConstraints { make in
                 make.height.equalTo(90)
                 make.width.equalTo(self.view)
                 make.centerX.equalTo(self.view)
                 make.bottom.equalTo(self.view)
             }
             
-            self.flashButton.snp_makeConstraints { make in
+            self.flashButton.snp.makeConstraints { make in
                 make.size.equalTo(60)
                 make.centerY.equalTo(self.bottomView)
                 make.left.equalTo(self.bottomView).offset(30)
             }
             
-            self.shootButton.snp_makeConstraints { make in
+            self.shootButton.snp.makeConstraints { make in
                 make.size.equalTo(80)
                 make.center.equalTo(self.bottomView)
             }
             
-            self.lastPhotoButton.snp_makeConstraints { make in
+            self.lastPhotoButton.snp.makeConstraints { make in
                 make.size.equalTo(60)
                 make.centerY.equalTo(self.bottomView)
                 make.right.equalTo(self.bottomView).inset(30)
@@ -56,10 +56,10 @@ class StartViewController: SignalViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.flashButton.backgroundColor = UIColor.clearColor()
+        self.flashButton.backgroundColor = UIColor.clear
         self.updateCameraFlashButton()
         
-        self.lastPhotoButton.backgroundColor = UIColor.clearColor()
+        self.lastPhotoButton.backgroundColor = UIColor.clear
         
         self.photoStorageService.accessStatusChangeCallback = { [weak self] (accessStatus: PhotoStorageServiceAccessStatus) -> Void  in
             if (self == nil) {
@@ -80,12 +80,12 @@ class StartViewController: SignalViewController {
         
         self.previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         self.previewLayer.bounds = bounds
-        self.previewLayer.position = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds))
+        self.previewLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
         
-        self.view.layer.insertSublayer(self.previewLayer, atIndex: 0)
+        self.view.layer.insertSublayer(self.previewLayer, at: 0)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         ReportViewModel.instance.reset()
     }
@@ -95,28 +95,28 @@ class StartViewController: SignalViewController {
         self.lastPhotoButton.imageView!.layer.borderWidth = 0
     }
     
-    private func updateCameraFlashButton() {
-        self.flashButton.hidden = !self.photoCaptureService.flashAvailable
+    fileprivate func updateCameraFlashButton() {
+        self.flashButton.isHidden = !self.photoCaptureService.flashAvailable
         
-        if (!self.flashButton.hidden) {
+        if (!self.flashButton.isHidden) {
             if (self.photoCaptureService.flashEnabled) {
                 let image = UIImage(named: "camera-flash")
-                self.flashButton.setImage(image, forState: UIControlState.Normal)
+                self.flashButton.setImage(image, for: UIControlState())
             } else {
-                let image = UIImage(named: "camera-flash")?.tint(UIColor.grayColor())
-                self.flashButton.setImage(image, forState: UIControlState.Normal)
+                let image = UIImage(named: "camera-flash")?.tint(UIColor.gray)
+                self.flashButton.setImage(image, for: UIControlState())
             }
         }
     }
     
-    private func updateLastPhotoButton() {
-        self.photoStorageService.fetchLastPhoto(CGSizeMake(100, 100), callback: { [unowned self] image in
-            dispatch_async(dispatch_get_main_queue(), {
-                self.lastPhotoButton.setImage(image, forState: UIControlState.Normal)
-                self.lastPhotoButton.imageView!.layer.cornerRadius = CGRectGetHeight(self.lastPhotoButton.imageView!.frame) / 2
+    fileprivate func updateLastPhotoButton() {
+        self.photoStorageService.fetchLastPhoto(CGSize(width: 100, height: 100), callback: { [unowned self] image in
+            DispatchQueue.main.async(execute: {
+                self.lastPhotoButton.setImage(image, for: UIControlState())
+                self.lastPhotoButton.imageView!.layer.cornerRadius = self.lastPhotoButton.imageView!.frame.height / 2
                 
                 if (image == nil) {
-                    self.lastPhotoButton.setTitle("Продолжить", forState: UIControlState.Normal)
+                    self.lastPhotoButton.setTitle("Продолжить", for: UIControlState())
                 }
             })
         })
@@ -124,7 +124,7 @@ class StartViewController: SignalViewController {
     
     //  MARK: Actions
     
-    @IBAction func onShoot(sender: AnyObject) {
+    @IBAction func onShoot(_ sender: AnyObject) {
         Log("Photo capture initiated")
         
         self.photoCaptureService.capturePhoto { error -> Void in
@@ -136,13 +136,13 @@ class StartViewController: SignalViewController {
         }
     }
     
-    @IBAction func onToggleFlash(sender: AnyObject) {
-        Log("Flash toggle initiated with original value %d", self.photoCaptureService.flashEnabled)
+    @IBAction func onToggleFlash(_ sender: AnyObject) {
+        Log("Flash toggle initiated with original value %d", self.photoCaptureService.flashEnabled as CVarArg)
         
         self.photoCaptureService.flashEnabled = !self.photoCaptureService.flashEnabled
         self.updateCameraFlashButton()
         
-        Log("Flash toggle completed with final value %d", self.photoCaptureService.flashEnabled)
+        Log("Flash toggle completed with final value %d", self.photoCaptureService.flashEnabled as CVarArg)
     }
 }
 

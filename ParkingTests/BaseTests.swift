@@ -9,7 +9,7 @@
 import XCTest
 
 class MockAppDelegate: NSObject, UIApplicationDelegate {
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         return true
     }
 }
@@ -17,7 +17,7 @@ class MockAppDelegate: NSObject, UIApplicationDelegate {
 class BaseTests: XCTestCase {
     override func setUp() {
         super.setUp()
-        UIApplication.sharedApplication().delegate = MockAppDelegate()
+        UIApplication.shared.delegate = MockAppDelegate()
     }
 }
 

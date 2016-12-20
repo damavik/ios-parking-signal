@@ -25,8 +25,8 @@ class AddressManagerTests: XCTestCase {
     
     func testLocationMinskAnharskaja() {
         class TestLocationService : LocationService {
-            func fetchCurrentLocation(callback: (LocationServiceResult) -> Void) -> Disposable? {
-                callback(LocationServiceResult.Success(CLLocation(latitude: 53.864505, longitude: 27.6811155)))
+            func fetchCurrentLocation(_ callback: @escaping (LocationServiceResult) -> Void) -> Disposable? {
+                callback(LocationServiceResult.success(CLLocation(latitude: 53.864505, longitude: 27.6811155)))
                 return nil
             }
         }
@@ -38,22 +38,22 @@ class AddressManagerTests: XCTestCase {
         targetAddress.street = "улица Байкальская"
         targetAddress.streetNumber = "66/2"
         
-        let expectation = self.expectationWithDescription("reverse-geocoding")
+        let expectation = self.expectation(description: "reverse-geocoding")
         
         let manager = AddressManager(locationService: TestLocationService())
         manager.fetchCurrentAddress { result -> Void in
             switch result {
-            case AddressManagerResult.Success(let address):
+            case AddressManagerResult.success(let address):
                 XCTAssertEqual(targetAddress, address)
                 
-            case AddressManagerResult.Failure(_):
+            case AddressManagerResult.failure(_):
                 XCTFail("Address should be fetched successfully")
             }
             
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0) { error -> Void in
+        self.waitForExpectations(timeout: 5.0) { error -> Void in
             XCTAssertNil(error)
         }
     }

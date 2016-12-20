@@ -12,9 +12,9 @@ import ObjectMapper
 class APIEndpointServiceImplementation: APIEndpointService {
     // MARK: APIEndpointService
     
-    func fetchOffences(completion: [Offense]? -> Void) -> Disposable? {
+    func fetchOffences(_ completion: @escaping ([Offense]?) -> Void) -> Disposable? {
         
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             // FIXME: fill model properly
             var offenses = [Offense]()
             
@@ -32,7 +32,7 @@ class APIEndpointServiceImplementation: APIEndpointService {
         return nil
     }
     
-    func uploadOffenseReport(report: Report, completion: NSError? -> Void) -> Disposable? {
+    func uploadOffenseReport(_ report: Report, completion: @escaping (NSError?) -> Void) -> Disposable? {
         var finalReport = report
         finalReport.offense.name = nil
         finalReport.offense.text = nil
@@ -41,8 +41,8 @@ class APIEndpointServiceImplementation: APIEndpointService {
         
         Log("report is \(reportJston)")
         
-        let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64(3 * Double(NSEC_PER_SEC)))
-        dispatch_after(popTime, dispatch_get_main_queue()) {
+        let popTime = DispatchTime.now() + Double(Int64(3 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: popTime) {
             completion(nil)
         }
         

@@ -11,7 +11,7 @@ import ObjectMapper
 
 struct GoogleGeocoderResultParser {
     
-    private enum AddressComponentType: String {
+    fileprivate enum AddressComponentType: String {
         case Country = "country"
         case PostalCode = "postal_code"
         case Street = "route"
@@ -20,12 +20,12 @@ struct GoogleGeocoderResultParser {
         case Sublocality = "sublocality_level_1"
     }
     
-    private struct AddressComponent : Mappable {
+    fileprivate struct AddressComponent : Mappable {
         var longValue: String!
         var shortValue: String!
         var type: AddressComponentType?
         
-        init?(_ map: Map) {
+        init?(map: Map) {
         }
         
         mutating func mapping(map: Map) {
@@ -35,7 +35,7 @@ struct GoogleGeocoderResultParser {
         }
     }
     
-    private func updateAddress(inout address: Address, addressComponent: AddressComponent) {
+    fileprivate func updateAddress(_ address: inout Address, addressComponent: AddressComponent) {
         if let componentType = addressComponent.type {
             
             switch componentType {
@@ -60,12 +60,12 @@ struct GoogleGeocoderResultParser {
         }
     }
     
-    func parseAddress(result: Dictionary<String, AnyObject>) -> Address? {
+    func parseAddress(_ result: Dictionary<String, AnyObject>) -> Address? {
         guard let addressComponents = result["address_components"] as? Array<Dictionary<String, AnyObject>> else {
             return nil
         }
         
-        let mappedAddressComponents = addressComponents.map { componentDictionary in Mapper<AddressComponent>().map(componentDictionary) }
+        let mappedAddressComponents = addressComponents.map { componentDictionary in Mapper<AddressComponent>().map(JSON: componentDictionary) }
         
         let resultAddress = mappedAddressComponents.reduce(Address()) { (address: Address, element: AddressComponent?) -> Address in
             

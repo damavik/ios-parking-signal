@@ -13,7 +13,7 @@ struct Reporter : Mappable, Equatable {
     var email: String!
     var residenceAddress: AddressValue!
     
-    init?(_ map: Map) {
+    init?(map: Map) {
     }
     
     mutating func mapping(map: Map) {

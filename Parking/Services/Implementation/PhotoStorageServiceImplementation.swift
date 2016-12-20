@@ -10,9 +10,9 @@ import UIKit
 import Photos
 
 private class PhotoResultImplementation: PhotoResult, Disposable {
-    private let asset: PHAsset
-    private let imageManager = PHImageManager.defaultManager()
-    private var requestId: PHImageRequestID?
+    fileprivate let asset: PHAsset
+    fileprivate let imageManager = PHImageManager.default()
+    fileprivate var requestId: PHImageRequestID?
     
     init(asset: PHAsset) {
         self.asset = asset
@@ -20,17 +20,17 @@ private class PhotoResultImplementation: PhotoResult, Disposable {
     
     //  MARK: PhotoResult
     
-    func fetchImage(targetSize: CGSize, callback: UIImage? -> Void) -> Disposable? {
+    @discardableResult func fetchImage(_ targetSize: CGSize, callback: @escaping (UIImage?) -> Void) -> Disposable? {
         Log("Photo libraray image fetch requested for size '%@'", NSStringFromCGSize(targetSize))
         
         let options = PHImageRequestOptions()
-        options.synchronous = false
-        options.version = .Current
-        options.deliveryMode = .Opportunistic
-        options.resizeMode = .None
-        options.networkAccessAllowed = true
+        options.isSynchronous = false
+        options.version = .current
+        options.deliveryMode = .opportunistic
+        options.resizeMode = .none
+        options.isNetworkAccessAllowed = true
         
-        self.requestId = self.imageManager.requestImageForAsset(self.asset, targetSize: targetSize, contentMode: PHImageContentMode.AspectFill, options: options, resultHandler: { result, _ in
+        self.requestId = self.imageManager.requestImage(for: self.asset, targetSize: targetSize, contentMode: PHImageContentMode.aspectFill, options: options, resultHandler: { result, _ in
             Log("Photo library image request for asset with target size '%@' completed", NSStringFromCGSize(targetSize))
             callback(result)
         })
@@ -51,16 +51,16 @@ private class PhotoResultImplementation: PhotoResult, Disposable {
 }
 
 class PhotoStorageServiceImplementation: NSObject, PhotoStorageService {
-    private var lastPhotoCallback: (CGSize, UIImage? -> Void)?
+    fileprivate var lastPhotoCallback: (CGSize, (UIImage?) -> Void)?
     
-    private var authorizationStatus = PHPhotoLibrary.authorizationStatus() {
+    fileprivate var authorizationStatus = PHPhotoLibrary.authorizationStatus() {
         didSet {
             guard let callbackInfo = self.lastPhotoCallback else {
                 return
             }
             
             switch self.authorizationStatus {
-            case .Authorized:
+            case .authorized:
                 guard let lastAsset = self.photoFetchResult.firstObject as? PHAsset else {
                     callbackInfo.1(nil)
                     return
@@ -70,7 +70,7 @@ class PhotoStorageServiceImplementation: NSObject, PhotoStorageService {
                 
                 self.lastPhotoCallback = nil
                 
-            case .Denied, .Restricted:
+            case .denied, .restricted:
                 callbackInfo.1(nil)
                 
                 self.lastPhotoCallback = nil
@@ -81,18 +81,18 @@ class PhotoStorageServiceImplementation: NSObject, PhotoStorageService {
         }
     }
     
-    private var photoFetchResult: PHFetchResult {
+    fileprivate var photoFetchResult: PHFetchResult<AnyObject> {
         get {
             let fetchOptions = PHFetchOptions()
             fetchOptions.sortDescriptors = [ NSSortDescriptor(key: "creationDate", ascending: false) ]
-            return PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions)
+            return PHAsset.fetchAssets(with: PHAssetMediaType.image, options: fetchOptions) as! PHFetchResult<AnyObject>
         }
     }
     
     override init() {
         super.init()
         
-        NSNotificationCenter.defaultCenter().addObserverForName(UIApplicationDidBecomeActiveNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (_) in
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: OperationQueue.main) { [weak self] (_) in
             
             if (self == nil) {
                 return
@@ -107,13 +107,13 @@ class PhotoStorageServiceImplementation: NSObject, PhotoStorageService {
             self!.accessStatusChangeCallback!(self!.accessStatus)
         }
         
-        if (self.authorizationStatus == .NotDetermined) {
+        if (self.authorizationStatus == .notDetermined) {
             Log("Photo libraray authorization status not determined")
             self.requestAccessGranting(nil)
         }
     }
     
-    private func requestAccessGranting(completion: (Void -> Void)?) {
+    fileprivate func requestAccessGranting(_ completion: ((Void) -> Void)?) {
         PHPhotoLibrary.requestAuthorization { status in
             self.authorizationStatus = status
             
@@ -136,7 +136,7 @@ class PhotoStorageServiceImplementation: NSObject, PhotoStorageService {
             let fetchResultValue = self.photoFetchResult
             
             for index in 0..<fetchResultValue.count {
-                let asset = fetchResultValue.objectAtIndex(index) as! PHAsset
+                let asset = fetchResultValue.object(at: index) as! PHAsset
                 result.append(PhotoResultImplementation(asset: asset))
             }
             
@@ -147,16 +147,16 @@ class PhotoStorageServiceImplementation: NSObject, PhotoStorageService {
     var accessStatus: PhotoStorageServiceAccessStatus {
         get {
             switch self.authorizationStatus {
-            case PHAuthorizationStatus.Authorized:
-                return PhotoStorageServiceAccessStatus.Authorized
+            case PHAuthorizationStatus.authorized:
+                return PhotoStorageServiceAccessStatus.authorized
                 
             default:
-                return PhotoStorageServiceAccessStatus.Forbidden
+                return PhotoStorageServiceAccessStatus.forbidden
             }
         }
     }
     
-    var accessStatusChangeCallback: (PhotoStorageServiceAccessStatus -> Void)? {
+    var accessStatusChangeCallback: ((PhotoStorageServiceAccessStatus) -> Void)? {
         didSet {
             if (self.accessStatusChangeCallback == nil) {
                 return
@@ -167,15 +167,15 @@ class PhotoStorageServiceImplementation: NSObject, PhotoStorageService {
     }
     
     func grantAccess() {
-        if (self.accessStatus == PhotoStorageServiceAccessStatus.Authorized) {
+        if (self.accessStatus == PhotoStorageServiceAccessStatus.authorized) {
             return
         }
         
-        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+        UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
     }
     
-    func fetchLastPhoto(targetSize: CGSize, callback: UIImage? -> Void) -> Disposable? {
-        if self.authorizationStatus == .NotDetermined {
+    func fetchLastPhoto(_ targetSize: CGSize, callback: @escaping (UIImage?) -> Void) -> Disposable? {
+        if self.authorizationStatus == .notDetermined {
             Log("Photo libraray last photo requested with not determined authorization status")
             
             self.lastPhotoCallback = (targetSize, callback)

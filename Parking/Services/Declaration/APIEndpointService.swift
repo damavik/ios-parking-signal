@@ -9,6 +9,6 @@
 import Foundation
 
 protocol APIEndpointService {
-    func fetchOffences(completion: [Offense]? -> Void) -> Disposable?
-    func uploadOffenseReport(report: Report, completion: NSError? -> Void) -> Disposable?
+    @discardableResult func fetchOffences(_ completion: @escaping ([Offense]?) -> Void) -> Disposable?
+    @discardableResult func uploadOffenseReport(_ report: Report, completion: @escaping (NSError?) -> Void) -> Disposable?
 }

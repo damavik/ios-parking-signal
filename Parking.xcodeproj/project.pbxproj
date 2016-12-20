@@ -421,11 +421,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8EA0F42F1B31E513003577A6 /* Build configuration list for PBXNativeTarget "Parking" */;
 			buildPhases = (
+				76CF41510B0963F136E34D66 /* [CP] Check Pods Manifest.lock */,
 				8EA0F40C1B31E512003577A6 /* Sources */,
 				8EA0F40D1B31E512003577A6 /* Frameworks */,
 				8EA0F40E1B31E512003577A6 /* Resources */,
 				F0B02BAE1C2EE787009FDB2C /* ShellScript */,
-				0D49DC958D419F0906010A2E /* Embed Pods Frameworks */,
+				0D49DC958D419F0906010A2E /* [CP] Embed Pods Frameworks */,
+				AECC6CC4A1ACC439B1795488 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -440,10 +442,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8EA0F4321B31E513003577A6 /* Build configuration list for PBXNativeTarget "ParkingTests" */;
 			buildPhases = (
+				C2094A5944CFDBB57058E77D /* [CP] Check Pods Manifest.lock */,
 				8EA0F4211B31E513003577A6 /* Sources */,
 				8EA0F4231B31E513003577A6 /* Resources */,
 				D2EA702ECA5E94DCE1D2339E /* Frameworks */,
-				E47B4A9F133C722E67761F1A /* Embed Pods Frameworks */,
+				E47B4A9F133C722E67761F1A /* [CP] Embed Pods Frameworks */,
+				25DAE9E17DE705292218F8F5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -459,10 +463,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F0AF50E61C39BA82009B58A9 /* Build configuration list for PBXNativeTarget "ParkingUITests" */;
 			buildPhases = (
+				C9B292E33207A8DE4A29297A /* [CP] Check Pods Manifest.lock */,
 				F0AF50D91C39BA82009B58A9 /* Sources */,
 				F0AF50DA1C39BA82009B58A9 /* Frameworks */,
 				F0AF50DB1C39BA82009B58A9 /* Resources */,
-				5615E2E083DAA706B66A5509 /* Embed Pods Frameworks */,
+				5615E2E083DAA706B66A5509 /* [CP] Embed Pods Frameworks */,
+				9876060F7311BAC439FE794F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -482,12 +488,13 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Signal;
 				TargetAttributes = {
 					8EA0F40F1B31E512003577A6 = {
 						CreatedOnToolsVersion = 6.3;
 						DevelopmentTeam = 54KZKZ5JS4;
+						LastSwiftMigration = 0820;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -497,10 +504,12 @@
 					8EA0F4241B31E513003577A6 = {
 						CreatedOnToolsVersion = 6.3;
 						DevelopmentTeam = 54KZKZ5JS4;
+						LastSwiftMigration = 0820;
 						TestTargetID = 8EA0F40F1B31E512003577A6;
 					};
 					F0AF50DC1C39BA82009B58A9 = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0820;
 						TestTargetID = 8EA0F40F1B31E512003577A6;
 					};
 				};
@@ -553,14 +562,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0D49DC958D419F0906010A2E /* Embed Pods Frameworks */ = {
+		0D49DC958D419F0906010A2E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -568,14 +577,29 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Parking/Pods-Parking-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5615E2E083DAA706B66A5509 /* Embed Pods Frameworks */ = {
+		25DAE9E17DE705292218F8F5 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ParkingTests/Pods-ParkingTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5615E2E083DAA706B66A5509 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -583,14 +607,89 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ParkingUITests/Pods-ParkingUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E47B4A9F133C722E67761F1A /* Embed Pods Frameworks */ = {
+		76CF41510B0963F136E34D66 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		9876060F7311BAC439FE794F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ParkingUITests/Pods-ParkingUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AECC6CC4A1ACC439B1795488 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Parking/Pods-Parking-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C2094A5944CFDBB57058E77D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		C9B292E33207A8DE4A29297A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E47B4A9F133C722E67761F1A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -736,8 +835,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Fabian Oliva (4B773NS985)";
@@ -760,7 +861,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "0bdf5427-7740-4ea1-9000-82945d0c0f9c";
@@ -782,8 +883,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Fabian Oliva (4B773NS985)";
@@ -799,10 +902,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE = "0bdf5427-7740-4ea1-9000-82945d0c0f9c";
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -811,6 +915,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 411B0A1A99C65F2654199E66 /* Pods-Parking.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -822,7 +927,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../../include\"/**",
 				);
 				INFOPLIST_FILE = Parking/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-D\" \"DEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vinahradau.signal;
@@ -830,6 +935,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Parking-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
@@ -838,6 +944,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FD7419C2794A583F59CD7F6B /* Pods-Parking.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vital Vinahradau (54KZKZ5JS4)";
@@ -849,13 +956,14 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../../include\"/**",
 				);
 				INFOPLIST_FILE = Parking/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vinahradau.signal;
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Parking-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;
@@ -864,6 +972,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 20AA0C0FA4D162250B429283 /* Pods-ParkingTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -874,11 +983,12 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = ParkingTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiverun.parking;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Parking.app/Parking";
 				VALID_ARCHS = "armv7 armv7s arm64";
 			};
@@ -888,17 +998,19 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 20623F9A7B2515CBC4962DE9 /* Pods-ParkingTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_TESTABILITY = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = ParkingTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiverun.parking;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Parking.app/Parking";
 				VALID_ARCHS = "armv7 armv7s arm64";
 			};
@@ -908,16 +1020,18 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3B37C49E07750FA36E74BBB0 /* Pods-ParkingUITests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = ParkingUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vinahradau.ParkingUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ParkingUITests/ParkingUITests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Parking.app/Parking";
 			};
 			name = Debug;
@@ -926,15 +1040,17 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EE3DAA8CB57DCBF71371003C /* Pods-ParkingUITests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = ParkingUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vinahradau.ParkingUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ParkingUITests/ParkingUITests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Parking.app/Parking";
 			};
 			name = Release;

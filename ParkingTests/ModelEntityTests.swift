@@ -23,7 +23,7 @@ class ModelEntityTests: XCTestCase {
     }
     
     func testLicenseMinskCityPlateParsing() {
-        let targetPlate = LicensePlate(region: .RegionMinskCity, seria: "АЕ", number: 1234)
+        let targetPlate = LicensePlate(region: .regionMinskCity, seria: "АЕ", number: 1234)
         XCTAssertEqual(targetPlate.string, "1234 АЕ-7")
                 
         var parsedPlate = LicensePlate("1234 АЕ-7")
@@ -40,7 +40,7 @@ class ModelEntityTests: XCTestCase {
     }
     
     func testLicenseMinskRegionPlateParsing() {
-        let targetPlate = LicensePlate(region: .RegionMinsk, seria: "АЕ", number: 1234)
+        let targetPlate = LicensePlate(region: .regionMinsk, seria: "АЕ", number: 1234)
         XCTAssertEqual(targetPlate.string, "1234 АЕ-5")
         
         var parsedPlate = LicensePlate("1234 АЕ-5")
@@ -68,11 +68,11 @@ class ModelEntityTests: XCTestCase {
     }
     
     func testReportPlateParsing() {
-        let targetPlate = LicensePlate(region: .RegionMinsk, seria: "АЕ", number: 1234)
+        let targetPlate = LicensePlate(region: .regionMinsk, seria: "АЕ", number: 1234)
         XCTAssertEqual(targetPlate.string, "1234 АЕ-5")
         
         let jsonString = "{ \"number\" : \"АЕ-5 1234\" }"
-        let report = Mapper<Report>().map(jsonString)
+        let report = Mapper<Report>().map(JSONString: jsonString)
         
         guard let plateValue = report?.licensePlate else {
             XCTFail("Should get non-nil license plate value")
@@ -80,10 +80,10 @@ class ModelEntityTests: XCTestCase {
         }
         
         switch plateValue {
-        case LicensePlateValue.Seria2004(let plate):
+        case LicensePlateValue.seria2004(let plate):
             XCTAssertEqual(targetPlate, plate)
             
-        case LicensePlateValue.Custom(_):
+        case LicensePlateValue.custom(_):
             XCTFail("Plate value shouldn't be parsed into custom value")
         }
     }
@@ -92,7 +92,7 @@ class ModelEntityTests: XCTestCase {
         let targetPlate = "7 TAX 1234"
         
         let jsonString = "{ \"number\" : \"\(targetPlate)\" }"
-        let report = Mapper<Report>().map(jsonString)
+        let report = Mapper<Report>().map(JSONString: jsonString)
         
         guard let plateValue = report?.licensePlate else {
             XCTFail("Should get non-nil license plate value")
@@ -100,10 +100,10 @@ class ModelEntityTests: XCTestCase {
         }
         
         switch plateValue {
-        case LicensePlateValue.Seria2004(_):
+        case LicensePlateValue.seria2004(_):
             XCTFail("Plate value shouldn't be parsed into seria2004 value")
             
-        case LicensePlateValue.Custom(let stringPlate):
+        case LicensePlateValue.custom(let stringPlate):
             XCTAssertEqual(targetPlate, stringPlate)
         }
     }
@@ -115,7 +115,7 @@ class ModelEntityTests: XCTestCase {
         XCTAssertNotNil(result)
         
         switch result! {
-        case AddressValue.Full(_):
+        case AddressValue.full(_):
             XCTFail("Invalid result type")
             
         default:
@@ -131,7 +131,7 @@ class ModelEntityTests: XCTestCase {
         XCTAssertNotNil(result)
         
         switch result! {
-        case AddressValue.Custom(_):
+        case AddressValue.custom(_):
             XCTFail("Invalid result type")
             
         default:

@@ -13,7 +13,7 @@ struct Offense : Mappable, Equatable {
     var name: String!
     var text: String!
         
-    init?(_ map: Map) {
+    init?(map: Map) {
     }
     
     mutating func mapping(map: Map) {

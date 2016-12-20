@@ -45,3 +45,6 @@ Carthage/Build
 
 # Facebook Infer analyzer output
 infer-out
+
+# AppCode generated
+.idea/

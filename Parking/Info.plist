@@ -38,6 +38,8 @@
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Автоопределение адреса</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Фото парковки</string>
 	<key>UIBackgroundModes</key>
 	<array/>
 	<key>UILaunchStoryboardName</key>

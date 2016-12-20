@@ -8,23 +8,23 @@
 
 import CoreLocation
 
-enum GeocoderServiceError: ErrorType {
-    case Unknown(String?)
-    case OverQueryLimit(String?)
-    case RequestDenied(String?)
-    case InvalidRequest(String?)
+enum GeocoderServiceError: Error {
+    case unknown(String?)
+    case overQueryLimit(String?)
+    case requestDenied(String?)
+    case invalidRequest(String?)
 }
 
 enum GeocoderServiceResult {
-    case Success(Address?)
-    case Failure(ErrorType)
+    case success(Address?)
+    case failure(Error)
 }
 
 enum GeocoderServiceLanguage : String {
-    case English = "en"
-    case Russian = "ru"
+    case english = "en"
+    case russian = "ru"
 }
 
 protocol GeocoderService {
-    func fetchAddress(location: CLLocation, language: GeocoderServiceLanguage, callback: GeocoderServiceResult -> Void) -> Disposable?
+    @discardableResult func fetchAddress(_ location: CLLocation, language: GeocoderServiceLanguage, callback: @escaping (GeocoderServiceResult) -> Void) -> Disposable?
 }

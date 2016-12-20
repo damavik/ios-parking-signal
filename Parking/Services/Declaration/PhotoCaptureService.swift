@@ -13,5 +13,5 @@ protocol PhotoCaptureService {
     var flashAvailable: Bool { get }
     var flashEnabled: Bool { get set }
     
-    func capturePhoto(completion: NSError? -> Void) -> Void
+    func capturePhoto(_ completion: @escaping (NSError?) -> Void) -> Void
 }
